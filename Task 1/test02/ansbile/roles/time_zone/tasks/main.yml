@@ -1,0 +1,4 @@
+---
+  - name: Set timezone
+    timezone:
+      name: "{{ region }}/{{ city }}"

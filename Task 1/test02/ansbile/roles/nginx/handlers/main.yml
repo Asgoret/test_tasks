@@ -1,0 +1,6 @@
+---
+  - name: Start NGINX service
+    systemd:
+      state: started
+      enabled: yes
+      name: "{{ package }}"

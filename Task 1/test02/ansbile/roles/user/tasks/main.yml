@@ -1,0 +1,14 @@
+---
+  - name: Create new user
+    user:
+      name: "{{ new_user }}"
+      shell: '/bin/bash'
+      append: yes
+      group: sudo
+
+  - name: Edit sudoers
+    lineinfile:
+      path: /etc/sudoers
+      insertafter: '^"#"includedir /etc/sudoers.d'
+      state: present
+      line: "{{ new_user }} ALL=NOPASSWD:/bin/systemctl"

@@ -1,0 +1,30 @@
+---
+  - name: Enabled UFW
+    ufw:
+      state: enabled
+ 
+  - name: Add SSH port to UFW
+    ufw:
+      port: "{{ new_ssh }}"
+      rule: allow
+      comment: New ssh port
+
+  - name: Add HTTP port to UFW
+    ufw:
+      port: "{{ http_port }}"
+      rule: allow
+      comment: 80 port for nginx
+
+  - name: Set default rules for incoming
+    ufw:
+      direction: incoming
+      default: deny
+  
+  - name: Set default rules for incoming
+    ufw:
+      direction: outgoing
+      default: allow
+
+  - name: Enabled UFW
+    ufw:
+      state: reloaded

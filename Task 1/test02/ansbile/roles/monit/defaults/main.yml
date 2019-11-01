@@ -1,0 +1,3 @@
+package: monit
+old_line: ['# set httpd','#     use address localhost','#     allow localhost','#     allow admin:monit']
+new_line: ['set httpd','use address localhost','allow localhost','allow devops:test']

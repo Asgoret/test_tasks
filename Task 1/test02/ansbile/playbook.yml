@@ -1,0 +1,49 @@
+- name: DevOps Task 1 test02
+  hosts: localhost
+  connection: local
+
+- name: Set locale
+  hosts: localhost
+  connection: local
+  roles: 
+    - locale
+  tags: locale
+  post_tasks:
+     - debug:
+        msg: hostname
+
+- name: Set time zone
+  hosts: localhost
+  connection: local
+  roles: 
+    - time_zone
+  tags: time
+
+- name: Configure SSH
+  hosts: localhost
+  connection: local
+  roles: 
+    - user
+  tags: user 
+
+- name: Create new user
+  hosts: localhost
+  connection: local
+  roles: 
+    - ssh
+  tags: ssh
+
+- name: Install and configure applications
+  hosts: localhost
+  connection: local
+  roles: 
+    - nginx
+    - monit
+  tags: app
+
+- name: Configure UFW
+  hosts: localhost
+  connection: local
+  roles: 
+    - ufw
+  tags: ufw

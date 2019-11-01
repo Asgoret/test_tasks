@@ -1,0 +1,42 @@
+---
+  - name: Update system
+    package:
+      name: '*'
+      state: present
+
+  - name: Install Monit
+    package:
+      name: "{{ package }}"
+      state: present
+
+  - name: Configure monit
+    replace:
+      path: /etc/monit/monitrc
+      regexp: "^{{ item.0 }}"
+      replace: "{{ item.1 }}"
+    loop: "{{ old_line|zip(new_line)|list}}"
+    notify: Restart Monit service
+  
+  - name: Add nginx to monitoring
+    blockinfile:
+      block: "{{ lookup('file', 'files/monit_nginx') }}"
+      dest: /etc/monit/monitrc
+      validate: monit -t %s
+    notify: Restart Monit service
+
+  - name: Add monit to nginx sites-available
+    copy:
+      src: 'files/nginx'
+      dest: '/etc/nginx/sites-available/monit'
+
+  - name: Delete default from nginx site-enabled
+    file:
+      dest: /etc/nginx/sites-enabled/default
+      state: absent
+
+  - name: Create a monit symbolic link link
+    file:
+      src: /etc/nginx/sites-available/monit
+      dest: /etc/nginx/sites-enabled/monit
+      state: link
+    notify: Restart Monit service

@@ -1,0 +1,11 @@
+---
+  - name: Restart Monit service
+    systemd:
+      state: restarted
+      enabled: yes
+      name: "{{ item_service.name }}"
+    loop:
+      - name: nginx
+      - name: monit
+    loop_control:
+      loop_var: item_service

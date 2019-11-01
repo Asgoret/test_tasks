@@ -1,0 +1,11 @@
+---
+  - name: Update system
+    package:
+      name: '*'
+      state: present
+
+  - name: Install NGINX
+    package:
+      name: "{{ package }}"
+      state: present
+    notify: Start NGINX service

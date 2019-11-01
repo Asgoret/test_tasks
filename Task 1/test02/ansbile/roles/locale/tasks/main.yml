@@ -1,0 +1,10 @@
+---
+  - name: Generate locale
+    locale_gen:
+      name: "{{ locale }}"
+
+  - name: Update LC_ALL
+    command: update-locale LC_ALL="{{ lc }}"
+
+  - name: Update LC_LANG
+    command: update-locale LANGUAGE="{{ lc }}"

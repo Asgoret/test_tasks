@@ -1,0 +1,9 @@
+server {
+    listen 80;
+    server_name 127.0.0.1;
+
+    location / {
+        proxy_pass http://127.0.0.1:2812;
+        proxy_set_header Host $host;
+    }
+}

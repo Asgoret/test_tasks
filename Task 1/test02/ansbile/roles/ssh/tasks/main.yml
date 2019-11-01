@@ -1,0 +1,15 @@
+---
+  - name: Change port of sshd daemon
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: '^Port {{ old_port }}'
+      insertafter: '^#Port '
+      line: Port "{{ new_port }}"
+
+  - name: Set permission for root login
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: '^#PermitRootLogin prohibit-password'
+      insertafter: '^#PermitRootLogin prohibit-password'
+      line: PermitRootLogin no
+    notify: sshd daemon reload

@@ -1,30 +1,21 @@
-# Questions
-* Какую архитектуру web-приложения (например, система продаж) выбрать?
-* Microservices или well-architectured monolith?
-* Как попадают в production приложения в Вашем CI/CD pipeline? Деплоить ли с помощью Ansible, Terraform? Или может быть мы уже готовы к Spinnaker(у)?
-* Нужен ли нам оркестратор? Зачем и какой именно выбрать? (Kubernetes, Docker swarm, Mesos, Hashicorp Nomad, AWS ECS)
-* Выкатили новую версию и обнаружили опечатку на главной странице. Сколько времени нужно, чтобы задеплоить в production в Вашем текущем CI/CD pipeline?
-* CI/CD для приложений организовали, а как бесперебойно и безопасно доставлять изменения для инфраструктуры?
-* Нужен ли нам multicloud (AWS + Google Cloud + Azure + DigitalOcean)?
-* Как раздавать пользователям со всего мира дистрибутивы Intellij IDEA (~500 Мб) (и прочих десктопных продуктов JetBrains) и чтобы support не засыпали жалобами на низкую скорость или недоступность файлов для скачивания в Китае.
-* Как построить хорошую систему отправки email-сообщений из приложений?
-* Для чего нам в проекте может быть полезным serverless?
-* Autoscaling приложений: на основе чего его построить и проблемы скалирования вверх-вниз?
-* Подход “Immutable/Disposable infrastructure”: чем он удобен, зачем нужен, какими средствами(утилитами) будем реализовывать?
-* Кто деплоит в production (devops, админ, разработчик, QA-инженер или может быть bash script или AWS Lambda function)? Насколько просто/сложно задеплоить приложение в production?
-* Разработчик сломал/повредил базу на staging-стеке в ходе своих экспериментов и просит “перезалить с production(a)”. Ваши действия?
-* Для чего может быть нужен ssh доступ к production-машинами и как его выдать?
-* Как секреты (пароли, ключи итд) попадают в приложение? Где секреты лучше хранить? Как обеспечить на staging-стеках одни секреты, а на production - другие.
-* Что нужно учесть при настройке SSL termination (например, на nginx) в 2018 году?
-* Ваш опыт с WAF (web application firewall)?
-* Пришло сообщение от системы мониторинга одного из серверов production backend(a) “No space left on device”. Что делать? (“df -klh” не показывает ни одного полностью занятого диска..)
-* У Вас есть план по disaster recovery Вашего production-стека? Что в нем описано? Давно Вы его проверяли (в тестовых целях)?
-* Service discovery и service mesh. Что это? Зачем нужно? Ваш опыт?
-* Расскажите о методах восстановления базы AWS RDS (MySQL 5.6) (какие методы доступны, как их выполнить итд)
-* Защита от DDOS. Какие методы применяли? Был ли реальный опыт?
-* Практические советы по построению хороших docker images
-* Схемы деплоймента: их преимущества и недостатки. Какую схем[у|ы] используете Вы и почему?
-* Внедряли ли вы систему distributed tracing для приложений? Насколько успешно? Каковы Ваши выводы?
-* IP адрес, на котором работает Ваш сервис на AWS попал под блокировку РКН. Что будете делать?
-* Расскажите как работает внедренный Вами конвейер сборки docker images?
-* Ваш опыт по мониторингу Java приложения в production(e). На что (на какие метрики) стоит первым делом настроить алерты? Ваши действия, если после очередного деплоя распределенного приложения появилась утечка памяти (memory leak)?
+# Task 4
+
+## Questions
+
+* Which architecture choose for sales system? Microservices или well-architectured monolith? Why?
+* Describe your CI/CD pipeline
+* In what cases do we need orchestrator? For what and what to choose and why? (Kubernetes, Docker swarm, Mesos, Hashicorp Nomad, AWS ECS)
+* CI/CD for apps was builded what about infrastructure changes?
+* What about multicloud (AWS + Google Cloud + Azure + DigitalOcean)?
+* How to delivery world-wide Intellij IDEA (~500 MB)?
+* Fow what we can use serverless?
+* Autoscaling applications: describe concept and show problems
+* Method “Immutable/Disposable infrastructure”: why it is comfortable? How we can use it? Which software we can release this method?
+* How we can store censetive data
+* There was alert message from one of production servers “No space left on device”. What shall you do? (“df -klh” don't show any full device)
+* Do you have plan of disaster recovery of your production environment? What's in it? Do you test?
+* Service discovery & service mesh. Put definition in own words and add some work cases.
+* Tell about methods of recovery AWS RDS (MySQL 5.6).
+* DDOS protection. Tell about methods and own expirience.
+* Your tips & for creating golden docker images.
+* Did you integrate distributed tracing system for applications? Was that integration successful?

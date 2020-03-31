@@ -1,19 +1,23 @@
-# Explain what the following script does:
+# Test 05
+
+## Standard track:
+
+Explain what the following script does:
 
 ```bash
-if ! which nc 
+if ! which nc
 then
 	echo "nc not found"
 	exit 1
 fi
 
-if ! which md5sum 
+if ! which md5sum
 then
 	echo "md5sum not found"
 	exit 1
 fi
 
-if ! which sha1sum 
+if ! which sha1sum
 then
 	echo "sha1sum not found"
 	exit 1
@@ -21,7 +25,7 @@ fi
 
 echo "Access denied" > /tmp/msg
 
-while true 
+while true
 do
 	PW="$(echo $((RANDOM % 7923456982376 * $((RANDOM % 7923456982376 * $((RANDOM % 7923456982376))))))$(date +%Y%m%d%HH%MM) | md5sum | sha1sum | cut -d " " -f 1)"
 	echo "blooper:$PW" | chpasswd

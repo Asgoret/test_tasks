@@ -1,15 +1,21 @@
-1. Создать публичный репозиторий на https://github.com для артефактов, полученных при работе с тестовым заданием.
-2. Подготовить Vagrantfile для шести виртуальных хостов (бокс ubuntu/xenial64) с ip адресами в одном адресном пространстве и разместить Vagrantfile в корне репозитория
-3. Подготовить playbook ansible, с помощью которого (используя ранее подготовленный Vagrantfile):
- - на трех хостах настроить vrrp соседство с тремя виртуальными ip адресами
- - развернуть два tenant (one, two) Distributed Minio на шести хостах (задействовав systemd unit files)
- - настроить экземпляры Nginx в режиме обратного прокси и балансировщика нагрузки для всех развернутых tenants
- - включить healthcheck nginx для vrrp демона
- - playbook разместить в корне репозитория
- - отобразить команды на развертывание виртуальных хостов и проигрывание playbook в README.MD репозитория
-4. Используя ad-hoc команды Ansible:
- - создать пользователей с правами на чтение и запись
- - залить в tenant two Minio файл, приложенный к этому письму
- - сами команды описать в README.MD репозитория
-5. Подготовить скрипт на Python, с помощью которого скачать залитый ранее файл из Minio со смещением 1000 (подробнее - см. Python Client API в Minio Client SDK for Python)
-6. Прислать полученный в результате выполнения скрипта файл изображения и ссылку на репозиторий по адресу электронной почты yuliya.petrova@iqoption.com
+# Task 2
+
+## Standard track
+
+1. Crete vagrantfile for six hosts (based on `ubuntu/xenial64`) with ip adreses from one ip pool and put in near readme file
+2. Create ansible playbook for:
+
+    - On three hosts configure vrrp neighborhood with three virtual hosts
+    - deploy two tenants (one, two) Distributed Minio on six hosts (use systemd unit files)
+    - Configure instances of Nginx in reverse proxy mode and balancing mode for all deployed tenants
+    - On health checks on nginx for vrrp daemon
+    - playbook put in root of task near vagrantfile
+    - Create make file with commands for start deploying instances and for ansible playbook
+
+3. Use ad-hoc ansible commands:
+
+    - create users and grant them read\write permissions
+    - upload random files into tenant two of minio
+    - all command write into documentation file
+
+4. Prepare script on python\go\bash, which will download file from minio

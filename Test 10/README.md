@@ -1,6 +1,6 @@
 # Development web server with load balancer
 
-Build an NGINX + Apache httpd web server serving PHP application with a Varnish
+Build a NGINX + Apache httpd web server serving PHP application with a Varnish
 or HAProxy load balancer in front of it following the diagram below:
 
 ![Developemnt web server diagram](images/diagram.png)

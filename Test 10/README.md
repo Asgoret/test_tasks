@@ -21,7 +21,7 @@ or HAProxy load balancer in front of it following the diagram below:
    following code:
 
    ```php
-   <?php phpinfo();
+   <?php phpinfo();?>
    ```
 
 3. Varnish or HAProxy should listen on port `:80` and serve 2 web server

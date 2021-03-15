@@ -1,0 +1,34 @@
+---
+- name: Install reqs for docker 
+  apt:
+   name: "{{ apt_item }}"
+   state: latest
+  loop:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - gnupg
+    - lsb-release
+    - python3-pip
+  loop_control:
+    loop_var: apt_item
+
+- name: Add Docker GPG apt Key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker APT repository
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/{{ ansible_system | lower }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable
+
+- name: Install Docker CE
+  apt:
+    name: "{{ docker_item }}"
+    state: latest
+  loop:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+  loop_control:
+    loop_var: docker_item

@@ -1,0 +1,41 @@
+---
+- name: Create users on ubuntu
+  user:
+    name: "{{ user_item }}"
+    append: yes
+    groups: sudo
+  loop:
+    - fred
+    - mark
+    - adam
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  loop_control:
+    loop_var: user_item
+
+- name: Create users on centos
+  user:
+    name: "{{ user_item }}"
+    append: yes
+    groups: wheel
+  loop:
+    - fred
+    - mark
+    - adam
+  loop_control:
+    loop_var: user_item
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- name: Set SSH public keys for users
+  authorized_key:
+    user: "{{ user_item.name }}"
+    state: present
+    key: "{{ user_item.key }}"
+  loop:
+    - name: fred
+      key: "{{ lookup('file', 'fred.ssh') }}"
+    - name: adam
+      key: "{{ lookup('file', 'adam.ssh') }}"
+    - name: mark
+      key: "{{ lookup('file', 'mark.ssh') }}"
+  loop_control:
+    loop_var: user_item

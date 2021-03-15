@@ -1,0 +1,28 @@
+---
+- name: Install repo for pgadmin
+  dnf:
+    name: 'https://ftp.postgresql.org/pub/pgadmin/pgadmin4/yum/pgadmin4-redhat-repo-1-1.noarch.rpm'
+    state: present
+
+  
+- name: Install pgadmin4
+  dnf:
+    name: pgadmin4-web
+    state: latest
+
+- name: Create directory for server
+  file:
+    state: directory
+    path: /opt/pgadmin4
+
+- name: Set postgresql.conf file
+  template:
+    src: server.json.j2
+    dest: /opt/pgadmin4/servers.json
+
+- name: Init pgadmin4
+  environment:
+    PGADMIN_SETUP_EMAIL: "test@test.com"
+    PGADMIN_SETUP_PASSWORD: "testtest"
+    PGADMIN_SERVER_JSON_FILE: "/opt/pgadmin4/servers.json"
+  shell: /usr/pgadmin4/bin/setup-web.sh --yes

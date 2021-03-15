@@ -1,0 +1,24 @@
+---
+- name: Install python deps
+  pip:
+    name: docker
+
+- name: Copy nginx template files
+  template:
+    src: "{{ j2_files_item }}"
+    dest: "/tmp/{{ j2_files_item | basename  | regex_replace('.j2')}}"
+  with_fileglob:
+    - ../templates/*.j2
+  loop_control:
+    loop_var: j2_files_item
+
+- name: Pull nginx docker image
+  docker_container:
+    name: nginx
+    image: nginx:1.19.8
+    state: started
+    ports: 
+      - 80:80
+    volumes:
+      - /tmp/nginx.conf:/etc/nginx/nginx.conf
+      - /tmp/index.html:/www/data/index.html

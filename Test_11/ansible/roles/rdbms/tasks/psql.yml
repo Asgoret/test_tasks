@@ -1,0 +1,134 @@
+---
+- name: Get psql password
+  set_fact:
+    psql_pass: "{{ psql_secure_pasword }}"
+
+- name: Add psql repository
+  dnf:
+    name: 'https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm'
+    state: present
+
+# Ansible doesn't support dnf module commands
+# Issue: https://github.com/ansible/ansible/issues/64852
+- name: Disable AppStream for psql
+  shell: dnf -qy module disable postgresql
+
+- name: Install psql 13
+  dnf:
+    name: 
+      - postgresql13
+      - postgresql13-server
+      - python3-psycopg2
+      - unzip
+    state: latest
+
+- name: First initialization
+  shell: /usr/pgsql-13/bin/postgresql-13-setup initdb
+
+- name: Enable psql daemon
+  systemd:
+    name: postgresql-13
+    state: started
+    enabled: yes
+    masked: no
+
+- name: Change user postgres password
+  become: yes
+  become_user: postgres
+  postgresql_user:
+    name: postgres
+    password: "{{ psql_pass }}"
+
+- name: Set postgresql.conf file
+  template:
+    src: postgresql.conf.j2
+    dest: /var/lib/pgsql/13/data/postgresql.conf
+
+- name: Configure psql pg_hba
+  postgresql_pg_hba:
+    dest: /var/lib/pgsql/13/data/pg_hba.conf
+    contype: host
+    databases: all
+    users: postgres
+    source: "{{ hostvars[item]['ansible_eth1']['ipv4']['address']}}"
+    method: md5
+    create: yes
+    backup_file: "true"
+  with_inventory_hostnames: 
+    - "{{ groups['web'] }}"
+    - "{{ groups['db'] }}"
+  notify:
+    - psql restart
+
+- name: Download demo sets
+  get_url:
+    url: "{{ demosets_item }}"
+    dest: /opt/
+  loop: 
+    - https://edu.postgrespro.ru/demo-small.zip
+    - https://edu.postgrespro.ru/demo-medium.zip
+    - https://edu.postgrespro.ru/demo-big.zip
+  loop_control:
+    loop_var: demosets_item
+
+- name: Unzip demo sets
+  unarchive:
+    src: "/opt/{{ archive_item }}"
+    dest: /opt/
+    remote_src: yes
+  loop:
+    - demo-small.zip
+    - demo-medium.zip
+    - demo-big.zip
+  loop_control:
+    loop_var: archive_item
+
+- name: Find all sql files
+  find:
+    paths: "/opt/"
+    patterns: '*.sql'
+  register: sql_files
+
+- name: Change database in demosets sql files
+  replace:
+    path: "{{ databases_names_item.path }}"
+    regexp: "demo"
+    replace: "{{ databases_names_item.path | basename | regex_replace('.sql')}}"
+  loop: "{{ sql_files.files }}"
+  loop_control:
+    loop_var: databases_names_item
+
+- name: Create databases
+  become: yes
+  become_user: postgres
+  postgresql_db:
+    name: "{{ databases_item.path | basename | regex_replace('.sql')}}"
+  loop: "{{ sql_files.files }}"
+  loop_control:
+    loop_var: databases_item
+
+
+- name: Upload SQL to database
+  become: yes
+  become_user: postgres
+  postgresql_db:
+    name: "{{ demoset_item.path | basename | regex_replace('.sql')}}"
+    state: restore
+    target: "{{ demoset_item.path }}"
+  loop: "{{ sql_files.files }}"
+  loop_control:
+    loop_var: demoset_item
+
+- name: Find files for deletion
+  find:
+    paths: "/opt/"
+    patterns: '*.sql,*.zip'
+  register: del_files
+
+- name: Delete files
+  file:
+    name: "{{ del_files_item.path }}"
+    state: absent
+  loop: "{{ del_files.files }}"
+  loop_control:
+    loop_var: del_files_item

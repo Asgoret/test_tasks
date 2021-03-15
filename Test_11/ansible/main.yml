@@ -1,0 +1,10 @@
+- name: Prepare VM's
+  hosts: nodes
+
+  roles:
+    - name: prepare
+      tags: init
+    - name: rdbms
+      tags: db
+    - name: front
+      tags: web

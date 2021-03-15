@@ -1,0 +1,15 @@
+---
+# tasks file for rdbms
+
+- name: Import RDBMS tasks
+  include_tasks: "{{ import_item.name }}"
+  when: 
+    - inventory_hostname in groups['db']
+    - import_item.apply|default(false)
+  loop:
+    - name: pgadmin.yml
+      apply: "{{ pgadmin_install|default('',true) }}"
+    - name: psql.yml
+      apply: "{{ psql_install|default('',true) }}"
+  loop_control:
+    loop_var: import_item

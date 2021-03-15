@@ -1,0 +1,45 @@
+---
+- name: Wait until the lock file is removed on debian|ubuntu nodes
+  wait_for:
+    timeout: 300
+  delegate_to: localhost
+
+- name: Ubuntu system update
+  apt:
+    name: "*"
+    state: latest
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  async: 1000
+  poll: 0
+  retries: 5
+  delay: 10
+  register: apt_update
+
+- name: CentOS system update
+  yum:
+    name: '*'
+    state: latest
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  async: 1001
+  poll: 0
+  retries: 5
+  delay: 10
+  register: yum_update
+
+- name: Check ubuntu async status
+  async_status:
+    jid: "{{ apt_update.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  retries: 100
+  delay: 10
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Check centos async status
+  async_status:
+    jid: "{{ yum_update.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  retries: 100
+  delay: 10
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'

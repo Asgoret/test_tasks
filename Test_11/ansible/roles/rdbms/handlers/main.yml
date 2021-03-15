@@ -1,0 +1,6 @@
+---
+# handlers file for rdbms
+- name: psql restart
+  systemd:
+    name: postgresql-13
+    state: restarted

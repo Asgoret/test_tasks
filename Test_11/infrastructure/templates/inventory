@@ -1,0 +1,21 @@
+# Set variables common for all ATA hosts
+[ATA:vars]
+
+# Create an ATA group that contains the web, db, nodes subgroups
+[ATA:children]
+web
+db
+nodes
+
+# Web nodes
+[web]
+${web_node_group}
+
+# Database nodes
+[db]
+${db_node_group}
+
+# All nodes
+[nodes]
+${web_node_group}
+${db_node_group}

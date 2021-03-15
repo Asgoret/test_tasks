@@ -1,0 +1,14 @@
+---
+# tasks file for ansible
+- name: Import prepare tasks
+  include_tasks: "{{ import_item.name }}"
+  when: 
+    - inventory_hostname in groups['nodes']
+    - import_item.apply|default(false)
+  loop:
+    - name: update.yml
+      apply: "{{ vms_update|default('',true) }}"
+    - name: users.yml
+      apply: "{{ add_users|default('',true) }}"
+  loop_control:
+    loop_var: import_item

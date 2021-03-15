@@ -1,0 +1,14 @@
+---
+# tasks file for front
+- name: Import 
+  include_tasks: "{{ import_item.name }}"
+  when: 
+    - inventory_hostname in groups['web']
+    - import_item.apply|default(false)
+  loop:
+    - name: docker.yml
+      apply: "{{ docker_install|default('',true) }}"
+    - name: nginx.yml
+      apply: "{{ nginx_install|default('',true) }}"
+  loop_control:
+    loop_var: import_item

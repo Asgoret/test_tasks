@@ -1,0 +1,12 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "{{ ansible_nodename }}",
+            "Host": "{{ ansible_eth1.ipv4.address }}",
+            "Port": 5432,
+            "MaintenanceDB": "postgres",
+            "Username": "postgres",
+            "SSLMode": "prefer"
+        }
+    }
+}

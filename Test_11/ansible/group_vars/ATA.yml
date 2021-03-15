@@ -1,0 +1,8 @@
+---
+# Group vars
+vms_update: false
+add_users: false
+psql_install: false
+pgadmin_install: false
+docker_install: false
+nginx_install: false

@@ -1,1 +1,4 @@
 .vscode
+Test_11/terraform.*
+Test_11/ansible/inventory_ata
+Test_11/.terraform
